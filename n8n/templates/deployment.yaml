@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-n8n
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-n8n
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-n8n
+    spec:
+      containers:
+        - name: n8n
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 5678
+          env:
+            - name: N8N_BASIC_AUTH_ACTIVE
+              value: {{ .Values.n8n.basicAuth.active | quote }}
+            - name: N8N_BASIC_AUTH_USER
+              value: {{ .Values.n8n.basicAuth.user | quote }}
+            - name: N8N_BASIC_AUTH_PASSWORD
+              value: {{ .Values.n8n.basicAuth.password | quote }}
+            - name: N8N_DB_TYPE
+              value: {{ .Values.n8n.database.type | quote }}
+            - name: N8N_DB_POSTGRESDB_HOST
+              value: {{ .Values.n8n.database.postgresdb.host | quote }}
+            - name: N8N_DB_POSTGRESDB_PORT
+              value: {{ .Values.n8n.database.postgresdb.port | quote }}
+            - name: N8N_DB_POSTGRESDB_DATABASE
+              value: {{ .Values.n8n.database.postgresdb.database | quote }}
+            - name: N8N_DB_POSTGRESDB_USER
+              value: {{ .Values.n8n.database.postgresdb.user | quote }}
+            - name: N8N_DB_POSTGRESDB_PASSWORD
+              value: {{ .Values.n8n.database.postgresdb.password | quote }}
+            - name: N8N_WEBHOOK_URL
+              value: {{ .Values.n8n.webhookUrl | quote }}
+            - name: N8N_GENERIC_DATA_TIME_FORMAT
+              value: {{ .Values.n8n.genericDataTimeFormat | quote }}
+            - name: N8N_TIMEZONE
+              value: {{ .Values.n8n.timezone | quote }}
+          resources:
+            {{- toYaml .Values.n8n.resources | nindent 12 }} 

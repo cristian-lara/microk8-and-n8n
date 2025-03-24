@@ -1,0 +1,41 @@
+replicaCount: 1
+
+image:
+  repository: n8nio/n8n
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5678
+
+n8n:
+  # Configuración básica de n8n
+  webhookUrl: "http://localhost:5678/"
+  genericDataTimeFormat: "YYYY-MM-DD HH:mm:ss"
+  timezone: "UTC"
+  
+  # Configuración de seguridad
+  basicAuth:
+    active: true
+    user: "admin"
+    password: "changeme"  # Cambiar en producción
+  
+  # Configuración de base de datos
+  database:
+    type: "postgresql"
+    postgresdb:
+      host: "postgresql"
+      port: 5432
+      database: "n8n"
+      user: "n8n"
+      password: "n8n"  # Cambiar en producción
+  
+  # Configuración de recursos
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi" 
