@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cm-acme-http-solver-xrlsz
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0,::/0
+  labels:
+    acme.cert-manager.io/http-domain: "2167343549"
+    acme.cert-manager.io/http-token: "1242304257"
+    acme.cert-manager.io/http01-solver: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: hworld.manticore-labs.com
+    http:
+      paths:
+      - path: /.well-known/acme-challenge/Iyk0bD_dkpckzjm5A7Qh9ND9CjCrRYskMq1TbgqLjEs
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: cm-acme-http-solver-krhw7
+            port:
+              number: 8089 

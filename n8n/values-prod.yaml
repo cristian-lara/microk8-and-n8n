@@ -1,0 +1,43 @@
+replicaCount: 2  # Aumentamos la replicación para alta disponibilidad
+
+image:
+  repository: n8nio/n8n
+  tag: "latest"
+  pullPolicy: Always  # Siempre obtener la última imagen
+
+service:
+  type: LoadBalancer  # Cambiamos a LoadBalancer para acceso externo
+  port: 5678
+
+n8n:
+  webhookUrl: "https://n8n.tudominio.com/"  # Cambiar por tu dominio
+  genericDataTimeFormat: "YYYY-MM-DD HH:mm:ss"
+  timezone: "UTC"
+  
+  basicAuth:
+    active: true
+    user: "admin"
+    password: "${N8N_BASIC_AUTH_PASSWORD}"  # Usar variable de entorno
+  
+  database:
+    type: "postgresql"
+    postgresdb:
+      host: "postgresql-prod"  # Nombre del servicio de PostgreSQL en producción
+      port: 5432
+      database: "n8n"
+      user: "${POSTGRES_USER}"  # Usar variable de entorno
+      password: "${POSTGRES_PASSWORD}"  # Usar variable de entorno
+  
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "2"
+      memory: "4Gi"
+
+  # Configuraciones adicionales para producción
+  security:
+    ssl: true
+    cors:
+      allowedOrigins: ["https://tudominio.com"]  # Cambiar por tu dominio 
